@@ -1,0 +1,58 @@
+Notes
+
+Context: We are creating shorts from a drag race between two cars. There are 4 different camera angles.
+
+1. Exterior camera, behind the car
+2. Exterior facing opponent car
+3. Interior showing speedometer
+4. Exterior showing pass by of both cars
+
+Purpose: Create a youtube short, showing camera 4. first and then 1,2 and 3 are merged together.
+
+Starting position of clip when dragged in Adobe Photoshop
+x: 540
+y: 960
+scale: 100
+
+# Note - Some of these values were mixed up (i think cam 1 and cam 4)
+
+Changes to position per clip:
+
+1. x: 540, y: 891, scale: 68
+2. x: 540, y: 1629, scale: 47
+3. x: 540, y: 360, scale: 72
+4. x: 540, y: 960, scale: 134
+
+Other effects
+
+1. brightness: +19, contrast: +16
+2. brightness: +19, contrast: +16
+3. brightness: +19, contrast: +16
+4. brightness: +19, contrast: +16, crop { left: 0%, top: 15%, right: 0, bottom: 28% }
+
+AI Proposed Filter Complex:
+filter_complex = (
+
+# 1. Process Camera 4 & center it on a 1080x1920 canvas
+
+"[3:v]scale=iw*1.34:ih*1.34,crop=iw:ih*(1-0.15-0.28):0:ih*0.15,eq=brightness=0.10:contrast=1.16[cam4_raw];"
+"color=s=1080x1920:c=black[canvas4];"
+"[canvas4][cam4_raw]overlay=x=(1080-w)/2:y=(1920-h)/2:shortest=1[cam4_processed];"
+
+# 2. Process Cameras 1, 2, and 3 (Color and Scaling)
+
+"[0:v]scale=iw*0.68:ih*0.68,eq=brightness=0.10:contrast=1.16[cam1_scaled];"
+"[1:v]scale=iw*0.47:ih*0.47,eq=brightness=0.10:contrast=1.16[cam2_scaled];"
+"[2:v]scale=iw*0.72:ih*0.72,crop=iw:ih*(1-0.15-0.28):0:ih*0.15,eq=brightness=0.10:contrast=1.16[cam3_scaled];"
+
+# 3. Build the 3-Camera Stack Layout on a blank 1080x1920 canvas
+
+"color=s=1080x1920:c=black[canvas_stack];"
+"[canvas_stack][cam1_scaled]overlay=x=(1080-w)/2:y=891-(h/2):shortest=1[tmp1];"
+"[tmp1][cam2_scaled]overlay=x=(1080-w)/2:y=1629-(h/2):shortest=1[tmp2];"
+"[tmp2][cam3_scaled]overlay=x=(1080-w)/2:y=360-(h/2):shortest=1[stack_segmented];"
+
+# 4. Sequence them: Both are now perfectly 1080x1920
+
+"[cam4_processed][stack_segmented]concat=n=2:v=1:a=0[video_out]"
+)
