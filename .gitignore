@@ -1,3 +1,8 @@
 ./files/*
 /files/*
 .DS_Store
+.venv
+__pycache__
+audios
+files
+uploaded
