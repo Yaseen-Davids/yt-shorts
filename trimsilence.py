@@ -121,7 +121,7 @@ def trim_silence(folder_path, processed_folder):
                 [start_time, end_time] = interval
 
                 file, ext = os.path.splitext(filename)
-                cut_output = f"{file}.mp4"
+                cut_output = f"trim_{indx}_{file}.mp4"
                 ffmpeg_extract_subclip(
                     file_path, start_time, end_time, targetname=cut_output
                 )
@@ -132,3 +132,6 @@ def trim_silence(folder_path, processed_folder):
                     os.path.join(processed_folder, cut_output)
                 )
                 print("Moved", cut_output)
+
+# files = os.path.join(os.path.dirname(__file__), "files")
+# trim_silence(files, files)

@@ -29,7 +29,7 @@ for folder in files:
 
     trim_silence(input_path, output_path)
 
-for folder in files:
+for folder in os.listdir("files"):
   filename = folder.split("_", 1)[-1]
 
   if not os.path.isfile(folder):

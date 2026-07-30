@@ -10,18 +10,18 @@ def process_vid(folder_path, output_path, filename):
   passbycam = os.path.join(folder_path, files[3])
 
   # Clips 1, 2, 3 share the same start/end (measured from the aligned window)
-  stack_start = binary_search_frame(ext_cam, "0.080") if "r" in filename.split("_")[-1] else binary_search_frame(ext_cam, "0.002")
+  stack_start = (binary_search_frame(ext_cam, "0.080") if "r" in filename.split("_")[-1] else binary_search_frame(ext_cam, "0.002")) - 0.5
   # stack_start = binary_search_frame(ext_cam, "0.002")
-  stack_end   = binary_search_frame(ext_cam, "0.999") + 2
+  stack_end   = binary_search_frame(ext_cam, "0.997") + 2
 
   # stack_start = "00:00:15"   # start for cam1, cam2, cam3
   # stack_end   = "00:00:33"   # end for cam1, cam2, cam3
 
-  passbycam_timestamp = binary_search_frame(passbycam, "0.720")
+  passbycam_timestamp = binary_search_frame(passbycam, "0.700")
 
   # Clip 4 has its own start/end
   cam4_start  = passbycam_timestamp if passbycam_timestamp is not None else 2
-  cam4_end    = (passbycam_timestamp if passbycam_timestamp is not None else 2) + 3
+  cam4_end    = (passbycam_timestamp if passbycam_timestamp is not None else 2) + 2.5
 
   print(f"Start: {stack_start}; End: {stack_end}")
   print(f"Cam start: {cam4_start}; End: {cam4_end}")

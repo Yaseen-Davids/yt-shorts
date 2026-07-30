@@ -98,7 +98,7 @@ def binary_search_frame(video_path, target_value):
     if found_timestamp == None:
         return None
 
-    return int(found_timestamp)
+    return float(found_timestamp)
 
 # Usage example
 # frame = binary_search_frame('video.mp4', "0.002")
